@@ -33,11 +33,20 @@ const HobbyEntryForm = () => {
       return;
     }
 
-    // Basic validation
+    // BUG: Incorrect validation - allows invalid values
     if (!category || !level || !emotion) {
       alert("Please fill in all fields");
       return;
     }
+
+    // BUG: Missing validation for valid ranges (1-5 for category/emotion, 1-10 for level)
+    // const categoryNum = parseInt(category);
+    // const levelNum = parseInt(level);
+    // const emotionNum = parseInt(emotion);
+    // if (categoryNum < 1 || categoryNum > 5 || levelNum < 1 || levelNum > 10 || emotionNum < 1 || emotionNum > 5) {
+    //   alert("Invalid values: Category and emotion must be 1-5, level must be 1-10");
+    //   return;
+    // }
 
     try {
       const date = Math.floor(Date.now() / 86400000); // Day number since epoch
