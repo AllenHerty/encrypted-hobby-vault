@@ -1,0 +1,108 @@
+/* Additional app-specific styles */
+.gradient-primary {
+  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.6));
+}
+
+/* Animations */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(15, 23, 42, 0.5);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(to bottom, #475569, #64748b);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(to bottom, #64748b, #94a3b8);
+}
+
+/* Glass morphism effect */
+.glass-card {
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(100, 116, 139, 0.2);
+}
+
+/* Gradient text animation */
+@keyframes gradient-shift {
+  0%, 100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animate-gradient {
+  background-size: 200% 200%;
+  animation: gradient-shift 3s ease infinite;
+}
+
+/* Form elements styling - FORCE dark text on white backgrounds - HIGHEST PRIORITY */
+select,
+input[type="text"],
+input[type="number"],
+input[type="email"],
+input[type="password"],
+input[type="date"],
+input[type="time"],
+textarea {
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+}
+
+/* Option elements MUST ALWAYS have dark text on white background - NO EXCEPTIONS */
+select option,
+option {
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+}
+
+/* Override ALL possible selectors for options */
+select option[value],
+option[value],
+select > option,
+option {
+  color: #1e293b !important;
+  background-color: #ffffff !important;
+}
+
+/* Force dark text on white/light backgrounds - ALL text elements */
+[class*="glass-card"] label,
+[class*="glass-card"] p:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]),
+[class*="glass-card"] span:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]),
+[class*="glass-card"] div:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]) {
+  color: #1e293b !important;
+}
+
+/* Force all labels to be dark */
+label {
+  color: #1e293b !important;
+}
+
+/* Force helper text to be dark */
+p.text-xs {
+  color: #1e293b !important;
+}
