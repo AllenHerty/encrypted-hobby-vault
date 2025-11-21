@@ -164,6 +164,14 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         return _userEntries[user][date].exists;
     }
 
+    /// @notice Get encrypted data summary for analysis
+    /// @param user The user address
+    /// @return totalEntries Total number of entries
+    /// @return lastDate Last entry date
+    function getUserSummary(address user) external view returns (uint256 totalEntries, uint256 lastDate) {
+        return (_entryCount[user], _lastEntryDate[user]);
+    }
+
     /// @notice Get all entry dates for a user (for analysis purposes)
     /// @param user The user address
     /// @param startDate The start date to search from
