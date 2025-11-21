@@ -7,6 +7,7 @@ import {SepoliaConfig} from "@fhevm/solidity/config/ZamaConfig.sol";
 /// @title EncryptedPrivateExpenseLog - Private Expense Log with Encrypted Analysis
 /// @notice Allows users to record encrypted expense data privately for anonymous analysis
 /// @dev Uses FHE to store encrypted expense data on-chain. Analysis is performed off-chain after decryption.
+/// @custom:security This contract implements privacy-preserving expense tracking using Fully Homomorphic Encryption
 contract EncryptedPrivateExpenseLog is SepoliaConfig {
     // Structure to store daily encrypted expense data
     struct ExpenseEntry {
