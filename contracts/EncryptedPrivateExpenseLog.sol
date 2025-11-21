@@ -47,8 +47,8 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         externalEuint8 encryptedEmotion,
         bytes calldata emotionProof
     ) external {
-        // BUG: Allow duplicate entries for same date - should prevent this
-        // require(!_userEntries[msg.sender][date].exists, "Entry already exists for this date");
+        // Prevent duplicate entries for the same date
+        require(!_userEntries[msg.sender][date].exists, "Entry already exists for this date");
 
         // Convert external inputs to internal FHE types
         euint8 category = FHE.fromExternal(encryptedCategory, categoryProof);
@@ -64,20 +64,19 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
             exists: true
         });
 
-        // BUG: Incorrect FHE permission granting - should allow contract first, then user
-        // CORRECT: FHE.allowThis(category); FHE.allow(category, msg.sender);
+        // Grant decryption permissions - allow contract first, then user
+        FHE.allowThis(category);
         FHE.allow(category, msg.sender);
-        FHE.allowThis(category);  // BUG: Wrong order
+        FHE.allowThis(level);
         FHE.allow(level, msg.sender);
-        FHE.allowThis(level);     // BUG: Wrong order
+        FHE.allowThis(emotion);
         FHE.allow(emotion, msg.sender);
-        FHE.allowThis(emotion);   // BUG: Wrong order
 
         // Update tracking
         if (date > _lastEntryDate[msg.sender]) {
             _lastEntryDate[msg.sender] = date;
         }
-        _entryCount[msg.sender]++;  // BUG: Always increments even for duplicate dates
+        _entryCount[msg.sender]++;
 
         emit EntryAdded(msg.sender, date, block.timestamp);
     }
