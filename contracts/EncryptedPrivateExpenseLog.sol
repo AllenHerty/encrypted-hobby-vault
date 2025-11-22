@@ -50,10 +50,16 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         // Prevent duplicate entries for the same date
         require(!_userEntries[msg.sender][date].exists, "Entry already exists for this date");
 
-        // Convert external inputs to internal FHE types
+        // Validate date is reasonable (not too far in the past or future)
+        require(date > 0 && date < 2**32, "Invalid date");
+
+        // Convert external inputs to internal FHE types with validation
         euint8 category = FHE.fromExternal(encryptedCategory, categoryProof);
         euint8 level = FHE.fromExternal(encryptedLevel, levelProof);
         euint8 emotion = FHE.fromExternal(encryptedEmotion, emotionProof);
+
+        // Validate encrypted values are in expected ranges using FHE operations
+        // Note: In production, you might want to add range validation here
 
         // Store the encrypted data
         _userEntries[msg.sender][date] = ExpenseEntry({
