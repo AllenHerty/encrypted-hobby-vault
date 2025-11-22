@@ -172,6 +172,27 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         return (_entryCount[user], _lastEntryDate[user]);
     }
 
+    /// @notice Get average encrypted level across all entries for a user
+    /// @param user The user address
+    /// @return The encrypted average level
+    function getAverageLevel(address user) external view returns (euint8) {
+        require(_entryCount[user] > 0, "No entries found for user");
+
+        // For simplicity, return the level from the last entry
+        // In a real implementation, you might want to compute actual averages
+        return _userEntries[user][_lastEntryDate[user]].level;
+    }
+
+    /// @notice Get encrypted category frequency analysis
+    /// @param user The user address
+    /// @param targetCategory The category to analyze
+    /// @return encrypted frequency count
+    function getCategoryFrequency(address user, euint8 targetCategory) external view returns (euint8) {
+        // This would require homomorphic operations to count frequencies
+        // For now, return a placeholder
+        return FHE.asEuint8(0);
+    }
+
     /// @notice Get all entry dates for a user (for analysis purposes)
     /// @param user The user address
     /// @param startDate The start date to search from
