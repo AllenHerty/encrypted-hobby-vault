@@ -199,6 +199,28 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         return FHE.asEuint8(0);
     }
 
+    /// @notice Store decrypted results for a user's entry (called by relayer)
+    /// @param user The user address
+    /// @param date The entry date
+    /// @param decryptedCategory The decrypted category value
+    /// @param decryptedLevel The decrypted level value
+    /// @param decryptedEmotion The decrypted emotion value
+    function storeDecryptedResults(
+        address user,
+        uint256 date,
+        uint8 decryptedCategory,
+        uint8 decryptedLevel,
+        uint8 decryptedEmotion
+    ) external {
+        require(_userEntries[user][date].exists, "Entry does not exist");
+
+        // Store decrypted values (in production, this would be done by a trusted relayer)
+        // For testing purposes, we allow anyone to call this
+        _userEntries[user][date].category = FHE.asEuint8(decryptedCategory);
+        _userEntries[user][date].level = FHE.asEuint8(decryptedLevel);
+        _userEntries[user][date].emotion = FHE.asEuint8(decryptedEmotion);
+    }
+
     /// @notice Get all entry dates for a user (for analysis purposes)
     /// @param user The user address
     /// @param startDate The start date to search from
