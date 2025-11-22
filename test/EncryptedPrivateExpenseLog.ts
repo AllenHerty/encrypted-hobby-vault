@@ -42,6 +42,31 @@ describe("EncryptedPrivateExpenseLog", function () {
     expect(await contract.getEntryCount(signers.alice.address)).to.eq(0);
   });
 
+  it("should prevent duplicate entries for the same date", async function () {
+    const date = Math.floor(Date.now() / 86400000); // Day number
+    const category = 3;
+    const level = 7;
+    const emotion = 4;
+
+    // Add first entry
+    await contract.connect(signers.alice).addEntry(
+      date,
+      await fhevm.createEncryptedInput(contractAddress, signers.alice.address, category),
+      await fhevm.createEncryptedInput(contractAddress, signers.alice.address, level),
+      await fhevm.createEncryptedInput(contractAddress, signers.alice.address, emotion)
+    );
+
+    // Try to add duplicate entry - should fail
+    await expect(
+      contract.connect(signers.alice).addEntry(
+        date,
+        await fhevm.createEncryptedInput(contractAddress, signers.alice.address, category),
+        await fhevm.createEncryptedInput(contractAddress, signers.alice.address, level),
+        await fhevm.createEncryptedInput(contractAddress, signers.alice.address, emotion)
+      )
+    ).to.be.revertedWith("Entry already exists for this date");
+  });
+
   it("should add an expense entry and retrieve it", async function () {
     const date = Math.floor(Date.now() / 86400000); // Day number
     const category = 3; // Category 1-5
