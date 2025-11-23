@@ -67,13 +67,28 @@ const HobbyEntryForm = () => {
         parseInt(level),
         parseInt(emotion)
       );
-      // Reset form
+
+      // Reset form on success
       setCategory("1");
       setLevel("1");
       setEmotion("1");
+
+      // Show success feedback
+      alert("Entry added successfully!");
     } catch (error: any) {
       console.error("Error adding entry:", error);
-      alert(`Failed to add hobby entry: ${error.message || "Unknown error"}`);
+
+      // Better error handling with specific messages
+      let errorMessage = "Failed to add entry. Please try again.";
+      if (error.message?.includes("Entry already exists")) {
+        errorMessage = "You already have an entry for today. Try again tomorrow.";
+      } else if (error.message?.includes("Missing requirements")) {
+        errorMessage = "FHE requirements not met. Please ensure you have the necessary setup.";
+      } else if (error.message?.includes("Invalid")) {
+        errorMessage = "Invalid input values. Please check your entries.";
+      }
+
+      alert(errorMessage);
     }
   };
 
