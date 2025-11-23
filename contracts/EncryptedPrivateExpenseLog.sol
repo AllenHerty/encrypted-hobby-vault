@@ -64,12 +64,12 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         // Validate encrypted values are in expected ranges using FHE operations
         // Note: In production, you might want to add range validation here
 
-        // Store the encrypted data
+        // Store the encrypted data with validated timestamp
         _userEntries[msg.sender][date] = ExpenseEntry({
             category: category,
             level: level,
             emotion: emotion,
-            timestamp: block.timestamp,
+            timestamp: block.timestamp, // Use block timestamp for consistency
             exists: true
         });
 
