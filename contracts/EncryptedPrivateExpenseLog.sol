@@ -53,6 +53,9 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         // Validate date is reasonable (not too far in the past or future)
         require(date > 0 && date < 2**32, "Invalid date");
 
+        // Additional validation: date should not be too far in the future
+        require(date <= block.timestamp / 86400 + 365, "Date too far in the future");
+
         // Convert external inputs to internal FHE types with validation
         euint8 category = FHE.fromExternal(encryptedCategory, categoryProof);
         euint8 level = FHE.fromExternal(encryptedLevel, levelProof);
