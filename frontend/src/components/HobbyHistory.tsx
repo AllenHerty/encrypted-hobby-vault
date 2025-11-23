@@ -37,15 +37,25 @@ interface HobbyEntry {
       const today = Math.floor(Date.now() / 86400000);
       const startDate = today - 30; // Last 30 days
       console.log("Date range:", startDate, "to", today);
+
+      // Add loading state management
+      setEntries([]); // Clear previous entries while loading
       const allEntries = await getAllEntries(startDate, today);
       console.log("Loaded entries:", allEntries.length);
+
+      // Sort entries by date (most recent first)
+      allEntries.sort((a, b) => b.date - a.date);
+
       setEntries(allEntries);
       setLastRefresh(new Date());
     } catch (error: any) {
       console.error("Error loading entries:", error);
-      // Don't show error to user if it's just missing data
-      if (!error.message?.includes("Missing requirements")) {
-        // Could show a user-friendly message here
+      // Better error handling with user feedback
+      if (error.message?.includes("Missing requirements")) {
+        console.warn("FHE requirements not met - some features may be unavailable");
+      } else {
+        // Show user-friendly error message
+        alert("Failed to load entries. Please check your connection and try again.");
       }
     }
   };
