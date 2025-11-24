@@ -67,6 +67,38 @@ describe("EncryptedPrivateExpenseLog", function () {
     ).to.be.revertedWith("Entry already exists for this date");
   });
 
+  it("should support batch entry addition", async function () {
+    const dates = [
+      Math.floor(Date.now() / 86400000) + 1,
+      Math.floor(Date.now() / 86400000) + 2
+    ];
+    const categories = [2, 4];
+    const levels = [5, 8];
+    const emotions = [3, 5];
+
+    // Create encrypted inputs for batch
+    const encryptedCategories = await Promise.all(
+      categories.map(cat => fhevm.createEncryptedInput(contractAddress, signers.alice.address, cat))
+    );
+    const encryptedLevels = await Promise.all(
+      levels.map(lvl => fhevm.createEncryptedInput(contractAddress, signers.alice.address, lvl))
+    );
+    const encryptedEmotions = await Promise.all(
+      emotions.map(emo => fhevm.createEncryptedInput(contractAddress, signers.alice.address, emo))
+    );
+
+    // Add batch entries
+    await contract.connect(signers.alice).batchAddEntries(
+      dates,
+      encryptedCategories,
+      encryptedLevels,
+      encryptedEmotions
+    );
+
+    // Verify entries were added
+    expect(await contract.getEntryCount(signers.alice.address)).to.eq(2);
+  });
+
   it("should add an expense entry and retrieve it", async function () {
     const date = Math.floor(Date.now() / 86400000); // Day number
     const category = 3; // Category 1-5
