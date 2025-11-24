@@ -224,6 +224,52 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         _userEntries[user][date].emotion = FHE.asEuint8(decryptedEmotion);
     }
 
+    /// @notice Batch add multiple entries (for testing/migration purposes)
+    /// @param dates Array of dates
+    /// @param categories Array of encrypted categories
+    /// @param levels Array of encrypted levels
+    /// @param emotions Array of encrypted emotions
+    function batchAddEntries(
+        uint256[] calldata dates,
+        externalEuint8[] calldata categories,
+        externalEuint8[] calldata levels,
+        externalEuint8[] calldata emotions
+    ) external {
+        require(dates.length == categories.length &&
+                categories.length == levels.length &&
+                levels.length == emotions.length, "Array lengths must match");
+        require(dates.length <= 10, "Batch size limited to 10 entries");
+
+        for (uint256 i = 0; i < dates.length; i++) {
+            // Reuse the single entry logic but skip duplicate checks for batch operations
+            if (!_userEntries[msg.sender][dates[i]].exists) {
+                euint8 category = FHE.fromExternal(categories[i], "");
+                euint8 level = FHE.fromExternal(levels[i], "");
+                euint8 emotion = FHE.fromExternal(emotions[i], "");
+
+                _userEntries[msg.sender][dates[i]] = ExpenseEntry({
+                    category: category,
+                    level: level,
+                    emotion: emotion,
+                    timestamp: block.timestamp,
+                    exists: true
+                });
+
+                FHE.allowThis(category);
+                FHE.allow(category, msg.sender);
+                FHE.allowThis(level);
+                FHE.allow(level, msg.sender);
+                FHE.allowThis(emotion);
+                FHE.allow(emotion, msg.sender);
+
+                if (dates[i] > _lastEntryDate[msg.sender]) {
+                    _lastEntryDate[msg.sender] = dates[i];
+                }
+                _entryCount[msg.sender]++;
+            }
+        }
+    }
+
     /// @notice Get all entry dates for a user (for analysis purposes)
     /// @param user The user address
     /// @param startDate The start date to search from
