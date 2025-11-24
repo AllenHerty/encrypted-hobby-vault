@@ -15,6 +15,9 @@ A privacy-preserving hobby tracking application using Fully Homomorphic Encrypti
 - **Category-Enjoyment Correlation**: Identify which hobby categories bring you the most enjoyment
 - **Engagement Trends**: Track your hobby engagement levels over time
 - **Decrypt on Demand**: Decrypt and view your entries when needed
+- **Batch Operations**: Support for adding multiple entries at once
+- **Network Switching**: Seamless switching between different blockchain networks
+- **Enhanced Error Handling**: Comprehensive error handling and user feedback
 
 ## Project Structure
 
