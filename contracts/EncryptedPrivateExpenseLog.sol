@@ -276,7 +276,7 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
     /// @param endDate The end date to search to
     /// @return dates Array of dates that have entries
     /// @dev This function helps frontend to know which dates to query for analysis
-    /// @dev Gas optimized: uses memory array and early returns
+    /// @dev Gas optimized: uses memory array and early returns, prevents memory leaks
     function getEntryDatesInRange(address user, uint256 startDate, uint256 endDate)
         external
         view
@@ -284,7 +284,7 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
     {
         require(endDate >= startDate, "Invalid date range");
 
-        // Gas optimization: limit date range to prevent excessive gas usage
+        // Gas optimization: limit date range to prevent excessive gas usage and memory issues
         require(endDate - startDate <= 365, "Date range too large, maximum 365 days allowed");
 
         uint256 count = 0;
@@ -292,6 +292,8 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         for (uint256 date = startDate; date <= endDate; date++) {
             if (_userEntries[user][date].exists) {
                 count++;
+                // Safety check to prevent extremely large arrays
+                require(count <= 366, "Too many entries in date range");
             }
         }
 
@@ -303,7 +305,7 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
         // Second pass: collect dates
         dates = new uint256[](count);
         uint256 index = 0;
-        for (uint256 date = startDate; date <= endDate; date++) {
+        for (uint256 date = startDate; date <= endDate && index < count; date++) {
             if (_userEntries[user][date].exists) {
                 dates[index] = date;
                 index++;
