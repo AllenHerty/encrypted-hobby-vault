@@ -27,15 +27,20 @@ export interface EncryptedPrivateExpenseLogInterface extends Interface {
   getFunction(
     nameOrSignature:
       | "addEntry"
+      | "batchAddEntries"
       | "entryExists"
+      | "getAverageLevel"
       | "getCategory"
+      | "getCategoryFrequency"
       | "getEmotion"
       | "getEntry"
       | "getEntryCount"
       | "getEntryDatesInRange"
       | "getLastEntryDate"
       | "getLevel"
+      | "getUserSummary"
       | "protocolId"
+      | "storeDecryptedResults"
   ): FunctionFragment;
 
   getEvent(nameOrSignatureOrTopic: "EntryAdded"): EventFragment;
@@ -53,12 +58,24 @@ export interface EncryptedPrivateExpenseLogInterface extends Interface {
     ]
   ): string;
   encodeFunctionData(
+    functionFragment: "batchAddEntries",
+    values: [BigNumberish[], BytesLike[], BytesLike[], BytesLike[]]
+  ): string;
+  encodeFunctionData(
     functionFragment: "entryExists",
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getAverageLevel",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "getCategory",
     values: [AddressLike, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "getCategoryFrequency",
+    values: [AddressLike, BytesLike]
   ): string;
   encodeFunctionData(
     functionFragment: "getEmotion",
@@ -85,17 +102,43 @@ export interface EncryptedPrivateExpenseLogInterface extends Interface {
     values: [AddressLike, BigNumberish]
   ): string;
   encodeFunctionData(
+    functionFragment: "getUserSummary",
+    values: [AddressLike]
+  ): string;
+  encodeFunctionData(
     functionFragment: "protocolId",
     values?: undefined
   ): string;
+  encodeFunctionData(
+    functionFragment: "storeDecryptedResults",
+    values: [
+      AddressLike,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish,
+      BigNumberish
+    ]
+  ): string;
 
   decodeFunctionResult(functionFragment: "addEntry", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "batchAddEntries",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(
     functionFragment: "entryExists",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
+    functionFragment: "getAverageLevel",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
     functionFragment: "getCategory",
+    data: BytesLike
+  ): Result;
+  decodeFunctionResult(
+    functionFragment: "getCategoryFrequency",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getEmotion", data: BytesLike): Result;
@@ -113,7 +156,15 @@ export interface EncryptedPrivateExpenseLogInterface extends Interface {
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "getLevel", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "getUserSummary",
+    data: BytesLike
+  ): Result;
   decodeFunctionResult(functionFragment: "protocolId", data: BytesLike): Result;
+  decodeFunctionResult(
+    functionFragment: "storeDecryptedResults",
+    data: BytesLike
+  ): Result;
 }
 
 export namespace EntryAddedEvent {
@@ -191,16 +242,35 @@ export interface EncryptedPrivateExpenseLog extends BaseContract {
     "nonpayable"
   >;
 
+  batchAddEntries: TypedContractMethod<
+    [
+      dates: BigNumberish[],
+      categories: BytesLike[],
+      levels: BytesLike[],
+      emotions: BytesLike[]
+    ],
+    [void],
+    "nonpayable"
+  >;
+
   entryExists: TypedContractMethod<
     [user: AddressLike, date: BigNumberish],
     [boolean],
     "view"
   >;
 
+  getAverageLevel: TypedContractMethod<[user: AddressLike], [string], "view">;
+
   getCategory: TypedContractMethod<
     [user: AddressLike, date: BigNumberish],
     [string],
     "view"
+  >;
+
+  getCategoryFrequency: TypedContractMethod<
+    [user: AddressLike, targetCategory: BytesLike],
+    [string],
+    "nonpayable"
   >;
 
   getEmotion: TypedContractMethod<
@@ -238,7 +308,25 @@ export interface EncryptedPrivateExpenseLog extends BaseContract {
     "view"
   >;
 
+  getUserSummary: TypedContractMethod<
+    [user: AddressLike],
+    [[bigint, bigint] & { totalEntries: bigint; lastDate: bigint }],
+    "view"
+  >;
+
   protocolId: TypedContractMethod<[], [bigint], "view">;
+
+  storeDecryptedResults: TypedContractMethod<
+    [
+      user: AddressLike,
+      date: BigNumberish,
+      decryptedCategory: BigNumberish,
+      decryptedLevel: BigNumberish,
+      decryptedEmotion: BigNumberish
+    ],
+    [void],
+    "nonpayable"
+  >;
 
   getFunction<T extends ContractMethod = ContractMethod>(
     key: string | FunctionFragment
@@ -260,6 +348,18 @@ export interface EncryptedPrivateExpenseLog extends BaseContract {
     "nonpayable"
   >;
   getFunction(
+    nameOrSignature: "batchAddEntries"
+  ): TypedContractMethod<
+    [
+      dates: BigNumberish[],
+      categories: BytesLike[],
+      levels: BytesLike[],
+      emotions: BytesLike[]
+    ],
+    [void],
+    "nonpayable"
+  >;
+  getFunction(
     nameOrSignature: "entryExists"
   ): TypedContractMethod<
     [user: AddressLike, date: BigNumberish],
@@ -267,11 +367,21 @@ export interface EncryptedPrivateExpenseLog extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "getAverageLevel"
+  ): TypedContractMethod<[user: AddressLike], [string], "view">;
+  getFunction(
     nameOrSignature: "getCategory"
   ): TypedContractMethod<
     [user: AddressLike, date: BigNumberish],
     [string],
     "view"
+  >;
+  getFunction(
+    nameOrSignature: "getCategoryFrequency"
+  ): TypedContractMethod<
+    [user: AddressLike, targetCategory: BytesLike],
+    [string],
+    "nonpayable"
   >;
   getFunction(
     nameOrSignature: "getEmotion"
@@ -315,8 +425,28 @@ export interface EncryptedPrivateExpenseLog extends BaseContract {
     "view"
   >;
   getFunction(
+    nameOrSignature: "getUserSummary"
+  ): TypedContractMethod<
+    [user: AddressLike],
+    [[bigint, bigint] & { totalEntries: bigint; lastDate: bigint }],
+    "view"
+  >;
+  getFunction(
     nameOrSignature: "protocolId"
   ): TypedContractMethod<[], [bigint], "view">;
+  getFunction(
+    nameOrSignature: "storeDecryptedResults"
+  ): TypedContractMethod<
+    [
+      user: AddressLike,
+      date: BigNumberish,
+      decryptedCategory: BigNumberish,
+      decryptedLevel: BigNumberish,
+      decryptedEmotion: BigNumberish
+    ],
+    [void],
+    "nonpayable"
+  >;
 
   getEvent(
     key: "EntryAdded"

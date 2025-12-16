@@ -1,10 +1,277 @@
-/* Additional app-specific styles */
-.gradient-primary {
-  background: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.6));
+/* Background particles effect */
+.bg-particles {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
 }
 
-/* Animations */
-@keyframes fade-in {
+.bg-particles::before,
+.bg-particles::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.15;
+}
+
+.bg-particles::before {
+  background: linear-gradient(135deg, #8b5cf6, #6366f1);
+  top: -100px;
+  right: -100px;
+  animation: float 8s ease-in-out infinite;
+}
+
+.bg-particles::after {
+  background: linear-gradient(135deg, #06b6d4, #3b82f6);
+  bottom: -100px;
+  left: -100px;
+  animation: float 10s ease-in-out infinite reverse;
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(139, 92, 246, 0.15);
+}
+
+/* Button shine effect */
+.btn-shine {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-shine::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.btn-shine:hover::before {
+  left: 100%;
+}
+
+/* Icon container */
+.icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+}
+
+/* Stats card */
+.stats-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.stats-card:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
+}
+
+/* Navigation item */
+.nav-item {
+  position: relative;
+  padding: 12px 16px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+}
+
+.nav-item::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 3px;
+  height: 0;
+  background: linear-gradient(to bottom, #8b5cf6, #6366f1);
+  border-radius: 2px;
+  transition: height 0.2s ease;
+}
+
+.nav-item.active::before {
+  height: 60%;
+}
+
+.nav-item.active {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.1));
+}
+
+/* Progress bar */
+.progress-bar {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  overflow: hidden;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  border-radius: 3px;
+  background: linear-gradient(90deg, #8b5cf6, #06b6d4);
+  transition: width 0.5s ease;
+}
+
+/* Badge styles */
+.badge-purple {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(99, 102, 241, 0.2));
+  border: 1px solid rgba(139, 92, 246, 0.3);
+  color: #a78bfa;
+}
+
+.badge-cyan {
+  background: linear-gradient(135deg, rgba(6, 182, 212, 0.2), rgba(59, 130, 246, 0.2));
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  color: #67e8f9;
+}
+
+.badge-green {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(5, 150, 105, 0.2));
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  color: #6ee7b7;
+}
+
+/* Empty state */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.empty-state-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(99, 102, 241, 0.05));
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+/* Floating Emojis */
+.floating-emojis {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.floating-emoji {
+  position: absolute;
+  font-size: 24px;
+  opacity: 0.15;
+  animation: floatUp 20s linear infinite;
+}
+
+@keyframes floatUp {
+  0% {
+    transform: translateY(100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.15;
+  }
+  90% {
+    opacity: 0.15;
+  }
+  100% {
+    transform: translateY(-100px) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+/* Tab Transitions */
+.tab-content {
+  transition: all 0.3s ease-out;
+}
+
+.tab-enter {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.tab-exit {
+  opacity: 0;
+  transform: translateY(20px) scale(0.98);
+}
+
+/* Feature Card */
+.feature-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(139, 92, 246, 0.1),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.feature-card:hover::before {
+  left: 100%;
+}
+
+/* Hobby Pill Animation */
+.hobby-pill {
+  animation: fadeInUp 0.5s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
   from {
     opacity: 0;
     transform: translateY(10px);
@@ -15,94 +282,40 @@
   }
 }
 
-.animate-fade-in {
-  animation: fade-in 0.3s ease-out;
-}
-
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.5);
-}
-
-::-webkit-scrollbar-thumb {
-  background: linear-gradient(to bottom, #475569, #64748b);
-  border-radius: 4px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: linear-gradient(to bottom, #64748b, #94a3b8);
-}
-
-/* Glass morphism effect */
-.glass-card {
-  background: rgba(15, 23, 42, 0.6);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(100, 116, 139, 0.2);
-}
-
-/* Gradient text animation */
-@keyframes gradient-shift {
+/* Pulse Glow for Badge */
+@keyframes pulseGlow {
   0%, 100% {
-    background-position: 0% 50%;
+    box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
   }
   50% {
-    background-position: 100% 50%;
+    box-shadow: 0 0 25px rgba(139, 92, 246, 0.5);
   }
 }
 
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease infinite;
+.animate-pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite;
 }
 
-/* Form elements styling - FORCE dark text on white backgrounds - HIGHEST PRIORITY */
-select,
-input[type="text"],
-input[type="number"],
-input[type="email"],
-input[type="password"],
-input[type="date"],
-input[type="time"],
-textarea {
-  color: #1e293b !important;
-  background-color: #ffffff !important;
+/* Bounce Animation */
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
-/* Option elements MUST ALWAYS have dark text on white background - NO EXCEPTIONS */
-select option,
-option {
-  color: #1e293b !important;
-  background-color: #ffffff !important;
+.animate-bounce {
+  animation: bounce 2s ease-in-out infinite;
 }
 
-/* Override ALL possible selectors for options */
-select option[value],
-option[value],
-select > option,
-option {
-  color: #1e293b !important;
-  background-color: #ffffff !important;
+/* Scale on hover for tabs */
+.scale-105 {
+  transform: scale(1.05);
 }
 
-/* Force dark text on white/light backgrounds - ALL text elements */
-[class*="glass-card"] label,
-[class*="glass-card"] p:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]),
-[class*="glass-card"] span:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]),
-[class*="glass-card"] div:not([class*="text-white"]):not([class*="text-slate-100"]):not([class*="text-slate-200"]) {
-  color: #1e293b !important;
-}
-
-/* Force all labels to be dark */
-label {
-  color: #1e293b !important;
-}
-
-/* Force helper text to be dark */
-p.text-xs {
-  color: #1e293b !important;
+/* Smooth transitions for all interactive elements */
+button, a, .card-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }

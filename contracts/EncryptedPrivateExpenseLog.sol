@@ -196,7 +196,7 @@ contract EncryptedPrivateExpenseLog is SepoliaConfig {
     /// @param user The user address
     /// @param targetCategory The category to analyze
     /// @return encrypted frequency count
-    function getCategoryFrequency(address user, euint8 targetCategory) external view returns (euint8) {
+    function getCategoryFrequency(address user, euint8 targetCategory) external returns (euint8) {
         // This would require homomorphic operations to count frequencies
         // For now, return a placeholder
         return FHE.asEuint8(0);
